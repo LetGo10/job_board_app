@@ -9,21 +9,21 @@
          x-transition:leave-end="opacity-0 scale-90"
          class="fixed inset-0 z-50 flex items-center justify-center p-4">
 
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-500/80 transition-opacity"
-             x-transition:enter="transition-opacity duration-300 ease-out"
+        <!-- Modal Backdrop -->
+        <div x-transition:enter="transition-opacity duration-300 ease-out"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
              x-transition:leave="transition-opacity duration-200 ease-in"
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-gray-500/80 transition-opacity"
              wire:click="closeModal">
         </div>
 
         <!-- Modal Content -->
         <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
 
-            <!-- Header -->
+            <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700"
                  x-transition:enter="transition-all duration-600 ease-out delay-100"
                  x-transition:enter-start="opacity-0 translate-y-8 scale-95 rotate-1"
@@ -31,7 +31,6 @@
                  x-transition:leave="transition-all duration-400 ease-in"
                  x-transition:leave-start="opacity-100 translate-y-0 scale-100 rotate-0"
                  x-transition:leave-end="opacity-0 translate-y-8 scale-95 -rotate-1">
-
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Apply for Position</h2>
                     <p class="text-gray-600 dark:text-gray-400 mt-1">
@@ -51,15 +50,17 @@
             <form wire:submit="submitApplication" class="p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    <!-- Left Column -->
+                    <!-- Left Column: Personal + Professional Info -->
                     <div class="space-y-6">
-                        <!-- Personal Info -->
+
+                        <!-- Personal Information -->
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Personal Information</h3>
 
                             <div class="mb-4">
                                 <label for="full_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
                                 <input type="text" id="full_name" wire:model.blur="full_name"
+                                       placeholder="Enter your full name"
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                                 @error('full_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
@@ -67,26 +68,26 @@
                             <div class="mb-4">
                                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
                                 <input type="email" id="email" wire:model="email"
+                                       placeholder="example@domain.com"
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                                 @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="mb-4">
-                                <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone *</label>
+                                <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label>
                                 <input type="tel" id="phone_number" wire:model="phone_number"
+                                       placeholder="+6012-3456789"
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                                 @error('phone_number') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
-                        <!-- Professional Info -->
+                        <!-- Professional Information -->
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Professional Information</h3>
 
                             <div class="mb-4">
-                                <label for="resume" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Resume (PDF/DOC, max 10MB) *
-                                </label>
+                                <label for="resume" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resume/CV * (PDF/DOC/DOCX, max 10MB)</label>
                                 <input type="file" id="resume" wire:model="resume" accept=".pdf,.doc,.docx"
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                                 @error('resume') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -95,31 +96,62 @@
                             <div class="mb-4">
                                 <label for="cover_letter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cover Letter</label>
                                 <textarea id="cover_letter" wire:model="cover_letter" rows="3"
+                                          placeholder="Write your cover letter here..."
                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
                                 @error('cover_letter') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
+
+                            <div class="mb-4">
+                                <label for="cover_letter_path" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Or Upload Cover Letter <span class="text-gray-500">(PDF, DOC, DOCX - Max 10MB)</span>
+                                </label>
+                                <input type="file" id="cover_letter_path" wire:model="cover_letter_path" accept=".pdf,.doc,.docx"
+                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                @error('cover_letter_path') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="linkedin_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn Profile URL</label>
+                                <input type="url" id="linkedin_url" wire:model="linkedin_url"
+                                       placeholder="https://linkedin.com/in/yourprofile"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                @error('linkedin_url') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="portfolio_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Portfolio/Website URL</label>
+                                <input type="url" id="portfolio_url" wire:model="portfolio_url"
+                                       placeholder="https://yourwebsite.com"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                @error('portfolio_url') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
                         </div>
                     </div>
 
-                    <!-- Right Column -->
+                    <!-- Right Column: Application Details -->
                     <div class="space-y-6">
-                        <!-- Application Details -->
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Application Details</h3>
 
                             <div class="mb-4">
                                 <label for="why_interested" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Why are you interested? *
+                                    Why are you interested in this position? *
                                 </label>
-                                <textarea id="why_interested" wire:model="why_interested" rows="3"
+                                <textarea id="why_interested" wire:model="why_interested" rows="4"
+                                          placeholder="Tell us why you're excited about this opportunity..."
                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
                                 @error('why_interested') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="mb-4">
-                                <label for="expected_salary" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Expected Salary</label>
+                                <label for="expected_salary" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Expected Salary
+                                </label>
                                 <input type="text" id="expected_salary" wire:model="expected_salary"
+                                       placeholder="e.g., RM 50,000 - RM 60,000 per year"
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                @error('expected_salary') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="mb-4">
@@ -129,25 +161,25 @@
                                 @error('available_start_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
-                            <div class="flex items-center">
+                            <div class="mb-4 flex items-center">
                                 <input type="checkbox" id="willing_to_relocate" wire:model="willing_to_relocate"
                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                                 <label for="willing_to_relocate" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-                                    Willing to relocate
+                                    I am willing to relocate for this position
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer -->
+                <!-- Form Actions -->
                 <div class="flex items-center justify-end pt-6 border-t border-gray-200 dark:border-gray-700 space-x-3">
-                    <button wire:click="closeModal"
-                            class="px-4 py-2 text-sm font-medium text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-800 hover:bg-purple-200 dark:hover:bg-purple-700 rounded-lg transition-colors">
-                        Close
+                    <button type="button" wire:click="closeModal"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                        Cancel
                     </button>
                     <button type="submit"
-                        class="px-6 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 rounded-lg transition-colors">
+                            class="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
                         Submit Application
                     </button>
                 </div>

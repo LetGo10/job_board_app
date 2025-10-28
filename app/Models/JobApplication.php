@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Job;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,6 +9,7 @@ class JobApplication extends Model
 {
     protected $fillable = [
         'job_id',
+        'user_id',
         'full_name',
         'email',
         'phone_number',

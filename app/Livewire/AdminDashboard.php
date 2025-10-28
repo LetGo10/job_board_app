@@ -2,10 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Models\Job;
+use App\Models\JobApplication;
 use Livewire\Component;
 
 class AdminDashboard extends Component
 {
+    public $totalJobsApply = 0;
+
+    public $totalJobs = 0;
+
     public function mount()
     {
         if (! auth()->check()) {
@@ -16,6 +22,9 @@ class AdminDashboard extends Component
         if (! auth()->user()->can('is-admin')) {
             abort(403, 'Unauthorized');
         }
+
+        $this->totalJobs = Job::count();
+        $this->totalJobsApply = JobApplication::count();
     }
 
     public function render()

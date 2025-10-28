@@ -2,17 +2,16 @@
 
 namespace App\Livewire\Auth2;
 
-use Livewire\Component;
-use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 class Login2 extends Component
 {
-    //#[Validate('required','email')]
+    // #[Validate('required','email')]
     public $email;
 
-    //#[Validate('required','min:8')]
+    // #[Validate('required','min:8')]
     public $password;
 
     public $remember;
@@ -29,9 +28,9 @@ class Login2 extends Component
     {
         $this->validate();
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password]))
-        {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             session()->regenerate();
+
             return redirect()->route('home');
         }
 
@@ -40,6 +39,6 @@ class Login2 extends Component
 
     public function render()
     {
-        return view('livewire.auth2.login2')->extends('layouts.app')->section('content');
+        return view('livewire.auth2.login2')->layout('layouts.app');
     }
 }

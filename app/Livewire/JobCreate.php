@@ -28,10 +28,14 @@ class JobCreate extends Component
             'company' => $this->company,
             'location' => $this->location,
             'description' => $this->description,
+            'owner_id' => auth()->id(),
         ]);
 
         $this->dispatch('jobCreated', $job->id);
         $this->closeModal();
+
+        // Redirect to checkout with job_id parameter
+        return redirect()->route('checkout', ['job_id' => $job->id]);
     }
 
     public function closeModal()

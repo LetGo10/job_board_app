@@ -90,7 +90,7 @@
                     <!-- Documents -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                            📄 Documents
+                            📄 Professional Information
                         </h3>
                         <ul class="space-y-2 text-sm">
                             <li>

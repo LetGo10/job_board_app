@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Job;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class JobPostPolicy
 {
@@ -30,7 +29,7 @@ class JobPostPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user?->role === 'admin';
     }
 
     /**
@@ -38,7 +37,7 @@ class JobPostPolicy
      */
     public function update(User $user, Job $job): bool
     {
-        //admin boleh edit semua post
+        // admin boleh edit semua post
         return $user?->role === 'admin';
     }
 

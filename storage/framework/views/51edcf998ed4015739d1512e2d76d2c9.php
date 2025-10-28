@@ -1,6 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100">
     <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <!-- Header -->
@@ -8,32 +5,33 @@
             <h2 class="text-2xl font-bold text-gray-900">Create Account ✨</h2>
             <p class="text-sm text-gray-500">
                 Already have an account?
-                <a href="{{ route('login') }}" class="text-purple-600 font-medium hover:underline">
+                <a href="<?php echo e(route('login')); ?>" class="text-purple-600 font-medium hover:underline">
                     Login here
                 </a>
             </p>
         </div>
 
         <!-- Form -->
-        <form method="POST" action="{{ route('register') }}" class="space-y-6">
-            @csrf
-
+        <form wire:submit.prevent="register" class="space-y-6">
             <!-- Name -->
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
                 <input
                     id="name"
-                    name="name"
                     type="text"
-                    required
-                    value="{{ old('name') }}"
+                    wire:model="name"
+                    placeholder="John Doe"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm
                            focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    placeholder="John Doe"
                 >
-                @error('name')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
 
             <!-- Email -->
@@ -41,17 +39,20 @@
                 <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
                 <input
                     id="email"
-                    name="email"
                     type="email"
-                    required
-                    value="{{ old('email') }}"
+                    wire:model="email"
+                    placeholder="you@example.com"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm
                            focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    placeholder="you@example.com"
                 >
-                @error('email')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
 
             <!-- Password -->
@@ -59,16 +60,20 @@
                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                 <input
                     id="password"
-                    name="password"
                     type="password"
-                    required
+                    wire:model="password"
+                    placeholder="••••••••"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm
                            focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    placeholder="••••••••"
                 >
-                @error('password')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
 
             <!-- Confirm Password -->
@@ -76,25 +81,28 @@
                 <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
                 <input
                     id="password_confirmation"
-                    name="password_confirmation"
                     type="password"
-                    required
+                    wire:model="password_confirmation"
+                    placeholder="••••••••"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm
                            focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    placeholder="••••••••"
                 >
-                @error('password_confirmation')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['password_confirmation'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
 
             <!-- Terms -->
             <div class="flex items-center">
                 <input
                     id="terms"
-                    name="terms"
                     type="checkbox"
-                    required
+                    wire:model="terms"
                     class="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                 >
                 <label for="terms" class="ml-2 block text-sm text-gray-600">
@@ -103,9 +111,14 @@
                     <a href="#" class="text-purple-600 hover:underline">Privacy Policy</a>
                 </label>
             </div>
-            @error('terms')
-                <p class="text-sm text-red-600">{{ $message }}</p>
-            @enderror
+            <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['terms'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="text-sm text-red-600"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 
             <!-- Button -->
             <button
@@ -118,4 +131,4 @@
         </form>
     </div>
 </div>
-@endsection
+<?php /**PATH C:\Users\OUM\Herd\job-board-app-2\resources\views/livewire/auth2/register2.blade.php ENDPATH**/ ?>

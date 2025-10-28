@@ -14,7 +14,8 @@ class JobApply extends Component
     use WithFileUploads;
 
     public bool $showModal = false;
-    //public $showModal = false;
+
+    // public $showModal = false;
     public ?Job $job = null;
     //
 
@@ -81,6 +82,7 @@ class JobApply extends Component
             // Create the job application
             JobApplication::create([
                 'job_id' => $this->job->id,
+                'user_id' => auth()->id(),
                 'full_name' => $this->full_name,
                 'email' => $this->email,
                 'phone_number' => $this->phone_number,

@@ -13,7 +13,31 @@ return new class extends Migration
     {
         Schema::create('job_applications', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('job_id');
+            $table->unsignedBigInteger('user_id');
+
+            // Personal Information
+            $table->string('full_name');
+            $table->string('email');
+            $table->string('phone_number');
+
+            // Professional Information
+            $table->string('resume_path')->nullable();
+            $table->text('cover_letter')->nullable();
+            $table->string('cover_letter_path')->nullable();
+            $table->string('linkedin_url')->nullable();
+            $table->string('portfolio_url')->nullable();
+
+            // Application-specific
+            $table->text('why_interested');
+            $table->string('expected_salary')->nullable();
+            $table->date('available_start_date');
+            $table->boolean('willing_to_relocate')->default(false);
+
             $table->timestamps();
+
+            $table->foreign('job_id')->references('id')->on('job_lists')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

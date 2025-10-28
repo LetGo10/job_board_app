@@ -10,25 +10,27 @@
     <!-- Navigation -->
     <nav class="flex-1 p-6 space-y-2 text-sm">
         <a href="{{ route('admin.dashboard') }}"
-        class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
                 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800' }}">
             📊 <span class="ml-3">Dashboard</span>
         </a>
-
-        <!-- <a href="#"
-        class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            📄 <span class="ml-3">My Jobs</span>
+        <a href="{{ route('user.dashboard') }}"
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+                {{ request()->routeIs('user.dashboard') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+            📊 <span class="ml-3">Dashboard</span>
         </a>
 
-        <a href="#"
-        class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            ➕ <span class="ml-3">Submit Jobs</span>
-        </a> -->
-
         <a href="{{ route('job.application') }}"
-        class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
                 {{ request()->routeIs('job.application') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800' }}">
             👥 <span class="ml-3">Applicants Jobs</span>
         </a>
+
+        <a href="{{ route('user.applications') }}"
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+                {{ request()->routeIs('user.applications') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+            📋 <span class="ml-3">My Applications</span>
+        </a>
+
     </nav>
 </aside>
