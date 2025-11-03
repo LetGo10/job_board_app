@@ -74,7 +74,7 @@
                             Try Payment Again
                         </button>
                         <div class="grid grid-cols-3 gap-2">
-                            <a href="{{ route('subscription') }}"
+                            <a href=""
                                class="border border-gray-300 text-gray-700 py-2 px-2 rounded-lg hover:bg-gray-50 transition font-medium text-center inline-block text-xs">
                                 Current
                             </a>

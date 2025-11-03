@@ -119,7 +119,7 @@
                                 Go to Dashboard
                             </button>
                             <div class="grid grid-cols-2 gap-2">
-                                <a href="{{ route('subscription') }}"
+                                <a href=""
                                    class="border border-gray-300 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-50 transition font-medium inline-block text-center text-xs">
                                     Manage
                                 </a>
