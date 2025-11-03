@@ -17,7 +17,7 @@
                     @endcannot
                 @endauth
                 @can('is-admin')
-                 <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('admin.dashboard') ? 'font-semibold text-purple-700' : '' }}">Admin Dashboard</a>
+                 <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('admin.dashboard') ? 'font-semibold text-purple-700' : '' }}">Dashboard</a>
                 @endcan
             </div>
         </div>

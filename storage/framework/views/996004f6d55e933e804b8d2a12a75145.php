@@ -19,7 +19,7 @@
         <a href="<?php echo e(route('post.job')); ?>"
             class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
                 <?php echo e(request()->routeIs('post.job') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800'); ?>">
-            ✏️ <span class="ml-3">Post A New Job</span>
+            ✏️ <span class="ml-3">Add New Job</span>
         </a>
 
         <a href="<?php echo e(route('admin.job.management')); ?>"
@@ -38,6 +38,12 @@
             class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
                 <?php echo e(request()->routeIs('job.application') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800'); ?>">
             👥 <span class="ml-3">Applicants Jobs</span>
+        </a>
+
+        <a href="<?php echo e(route('users.list')); ?>"
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+                <?php echo e(request()->routeIs('users.list') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800'); ?>">
+            👥 <span class="ml-3">User list</span>
         </a>
         <?php endif; ?>
 

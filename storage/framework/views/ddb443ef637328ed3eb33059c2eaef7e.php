@@ -17,7 +17,7 @@
                     <?php endif; ?>
                 <?php endif; ?>
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('is-admin')): ?>
-                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('admin.dashboard') ? 'font-semibold text-purple-700' : ''); ?>">Admin Dashboard</a>
+                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('admin.dashboard') ? 'font-semibold text-purple-700' : ''); ?>">Dashboard</a>
                 <?php endif; ?>
             </div>
         </div>

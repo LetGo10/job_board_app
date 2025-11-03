@@ -53,6 +53,10 @@ Route::get('/my-job-posts', function () {
     return view('my-job-posts');
 })->middleware(['auth'])->name('my.job.posts');
 
+Route::get('/users-list', function () {
+    return view('user-list');
+})->middleware(['auth'])->name('users.list');
+
 Route::get('/edit-job/{jobId}', function ($jobId) {
     return view('edit-my-job-posts', compact('jobId'));
 })->middleware(['auth'])->name('edit-job');
