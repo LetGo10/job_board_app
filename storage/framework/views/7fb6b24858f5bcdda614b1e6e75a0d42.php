@@ -217,46 +217,39 @@ endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
 
-            <!-- Job Description -->
-            <div>
-                <div class="flex items-center justify-between mb-2">
-                    <label for="description" class="block text-sm font-medium text-gray-700">
-                        Job Description <span class="text-red-500">*</span>
-                    </label>
+<!-- Job Description -->
+<div>
+    <div class="flex items-center justify-between mb-2">
+        <label for="description-editor" class="block text-sm font-medium text-gray-700">
+            Job Description <span class="text-red-500">*</span>
+        </label>
 
-                    <button
-                        type="button"
-                        wire:click="openModal"
-                        class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
-                    >
-                        Generate with AI
-                    </button>
-                </div>
-                <textarea id="description"
-                          wire:model="description"
-                          rows="6"
-                          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 <?php $__errorArgs = ['description'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                          placeholder="Describe the role, responsibilities, and what the candidate will be doing..."></textarea>
+        <button
+            type="button"
+            wire:click="openModal"
+            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
+        >
+            Generate with AI
+        </button>
+    </div>
 
-                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['description'];
+    <div wire:ignore>
+        <textarea id="description-editor"
+                  class="w-full border rounded-lg"
+                  placeholder="Describe the role, responsibilities, and what the candidate will be doing..."><?php echo e($description); ?></textarea>
+    </div>
+
+    <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['description'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                    <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
-                <?php unset($message);
+        <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+    <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
-
-            </div>
+</div>
 
             <!-- Requirements -->
             <div>
@@ -311,4 +304,37 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         </form>
     </div>
 </div>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+<script>
+    let editorInstance = null;
+
+    document.addEventListener('livewire:initialized', function () {
+        // Initialize CKEditor
+        ClassicEditor
+            .create(document.querySelector('#description-editor'))
+            .then(editor => {
+                editorInstance = editor;
+
+                // Set initial content
+                editor.setData(<?php echo json_encode($description, 15, 512) ?> || '');
+
+                // Sync CKEditor data back to Livewire
+                editor.model.document.on('change:data', () => {
+                    window.Livewire.find('<?php echo e($_instance->getId()); ?>').set('description', editor.getData());
+                });
+            })
+            .catch(error => {
+                console.error('CKEditor init error:', error);
+            });
+    });
+
+    // Listen for AI response to refresh editor
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('refreshEditor', () => {
+            if (editorInstance) {
+                editorInstance.setData(window.Livewire.find('<?php echo e($_instance->getId()); ?>').get('description') || '');
+            }
+        });
+    });
+</script>
 <?php /**PATH C:\Users\OUM\Herd\job-board-app-2\resources\views/livewire/post-job.blade.php ENDPATH**/ ?>

@@ -68,4 +68,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(JobApplication::class);
     }
+
+    /**
+     * Get the jobs posted by the user
+     */
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(Job::class, 'owner_id');
+    }
 }

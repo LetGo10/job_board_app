@@ -1,6 +1,7 @@
 <?php $__env->startSection('content'); ?>
     <h2 class="text-2xl font-bold">User List</h2>
-    <p class="text-sm text-gray-600 mb-6">Manage and review your job postings</p>
+    <p class="text-sm text-gray-600 mb-6">Manage and review user accounts</p>
+
     <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
@@ -8,6 +9,24 @@ $__split = function ($name, $params = []) {
 [$__name, $__params] = $__split('user-list', []);
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1851580242-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
+    
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-profile-view', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1851580242-1', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

@@ -9,7 +9,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-
+        <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
         <!-- Styles / Scripts -->
         <?php if (isset($component)) { $__componentOriginalb75232b8bc12d517b99e803bac7dbc77 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalb75232b8bc12d517b99e803bac7dbc77 = $attributes; } ?>

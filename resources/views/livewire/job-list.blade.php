@@ -15,26 +15,31 @@
             <!-- Vertical Buttons with gap -->
             <div class="flex flex-col items-start gap-3 mt-6 md:mt-0 md:ml-6">
 
-                @can('update', $job)
+                <!-- @can('update', $job)
                 <button wire:click="editJob({{ $job->id }})"
                     class="flex items-center gap-1 px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 text-sm">
                     ✏️ <span>Edit</span>
                 </button>
-                @endcan
+                @endcan -->
 
                 @can('view', $job)
                 <button wire:click="viewJob({{ $job->id }})"
-                    class="flex items-center gap-1 px-3 py-1.5 rounded-md bg-green-50 text-green-600 hover:bg-green-100 text-sm">
-                    👁️ <span>View</span>
+                    class="px-6 py-2.5 bg-purple-600 text-white font-medium rounded-full shadow-md
+                        hover:bg-purple-700 hover:shadow-lg transition-all duration-200
+                        flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <span>Apply Now</span>
                 </button>
                 @endcan
 
-                @can('delete', $job)
+                <!--  @can('delete', $job)
                 <button wire:click="confirmDelete({{ $job->id }})"
                     class="flex items-center gap-1 px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 text-sm">
                     🗑️ <span>Delete</span>
                 </button>
-                @endcan
+                @endcan -->
 
 
                 <!-- <button wire:click="viewJob({{ $job->id }})"

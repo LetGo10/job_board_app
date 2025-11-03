@@ -27,7 +27,7 @@
             <div class="flex items-center space-x-4">
                 <!-- Create Job Button -->
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('is-admin')): ?>
-                    <button
+                    <!--<button
                         x-data
                         @click="$dispatch('open-job-modal')"
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-white font-medium
@@ -39,7 +39,18 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
                         Create Job
-                    </button>
+                    </button>-->
+                    <a href="<?php echo e(route('post.job')); ?>"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-white font-medium
+                            bg-gradient-to-r from-purple-600 to-pink-600
+                            hover:opacity-90 shadow-md hover:shadow-lg
+                            transition duration-200"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Create Job
+                    </a>
                 <?php endif; ?>
                 <a href="" class="text-sm text-purple-700 hover:underline <?php echo e(request()->routeIs('profile') ? 'font-bold underline' : ''); ?>">
                     Profile

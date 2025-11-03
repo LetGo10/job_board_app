@@ -45,6 +45,12 @@
                 {{ request()->routeIs('users.list') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800' }}">
             👥 <span class="ml-3">User list</span>
         </a>
+
+        <a href="{{ route('user.applications') }}"
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+                {{ request()->routeIs('user.applications') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+            📋 <span class="ml-3">My Applications</span>
+        </a>
         @endcan
 
         @cannot('is-admin')

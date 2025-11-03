@@ -64,7 +64,7 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center items-center space-x-2">
-                                    <button wire:click="$dispatch('openUserView', { userId: {{ $user->id }} })" title="View User" class="p-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none rounded-full transition-all duration-200">
+                                    <button wire:click="viewProfile({{ $user->id }})" title="View User" class="p-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none rounded-full transition-all duration-200">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -122,4 +122,38 @@
             </div>
         </div>
     @endif
+
+        <!-- Delete Modal -->
+    <div x-data="{ open: @entangle('showDeleteModal') }" x-cloak>
+        <div x-show="open"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4"
+            x-transition:enter="transition-all duration-500 ease-out"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition-all duration-300 ease-in"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90">
+
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-500/70" @click="open = false"></div>
+
+            <!-- Modal Content -->
+            <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 z-10">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Confirm Delete</h2>
+                <p class="text-gray-600 mb-6">
+                    Are you sure you want to delete this job listing? This action cannot be undone.
+                </p>
+                <div class="flex justify-end gap-3">
+                    <button wire:click="closeDeleteModal"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                        Cancel
+                    </button>
+                    <button wire:click="deleteUser({{ $userToDelete }})"
+                        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

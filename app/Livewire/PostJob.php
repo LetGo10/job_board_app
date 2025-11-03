@@ -106,6 +106,8 @@ class PostJob extends Component
     {
         if (isset($data['response'])) {
             $this->description = $data['response'];
+            // Dispatch event untuk refresh CKEditor
+            $this->dispatch('refreshEditor');
         }
     }
 

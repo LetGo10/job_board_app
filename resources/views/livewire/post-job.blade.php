@@ -131,32 +131,32 @@
                 @enderror
             </div>
 
-            <!-- Job Description -->
-            <div>
-                <div class="flex items-center justify-between mb-2">
-                    <label for="description" class="block text-sm font-medium text-gray-700">
-                        Job Description <span class="text-red-500">*</span>
-                    </label>
+<!-- Job Description -->
+<div>
+    <div class="flex items-center justify-between mb-2">
+        <label for="description-editor" class="block text-sm font-medium text-gray-700">
+            Job Description <span class="text-red-500">*</span>
+        </label>
 
-                    <button
-                        type="button"
-                        wire:click="openModal"
-                        class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
-                    >
-                        Generate with AI
-                    </button>
-                </div>
-                <textarea id="description"
-                          wire:model="description"
-                          rows="6"
-                          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 @error('description') border-red-500 @enderror"
-                          placeholder="Describe the role, responsibilities, and what the candidate will be doing..."></textarea>
+        <button
+            type="button"
+            wire:click="openModal"
+            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
+        >
+            Generate with AI
+        </button>
+    </div>
 
-                @error('description')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+    <div wire:ignore>
+        <textarea id="description-editor"
+                  class="w-full border rounded-lg"
+                  placeholder="Describe the role, responsibilities, and what the candidate will be doing...">{{ $description }}</textarea>
+    </div>
 
-            </div>
+    @error('description')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+    @enderror
+</div>
 
             <!-- Requirements -->
             <div>
@@ -197,3 +197,36 @@
         </form>
     </div>
 </div>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+<script>
+    let editorInstance = null;
+
+    document.addEventListener('livewire:initialized', function () {
+        // Initialize CKEditor
+        ClassicEditor
+            .create(document.querySelector('#description-editor'))
+            .then(editor => {
+                editorInstance = editor;
+
+                // Set initial content
+                editor.setData(@json($description) || '');
+
+                // Sync CKEditor data back to Livewire
+                editor.model.document.on('change:data', () => {
+                    @this.set('description', editor.getData());
+                });
+            })
+            .catch(error => {
+                console.error('CKEditor init error:', error);
+            });
+    });
+
+    // Listen for AI response to refresh editor
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('refreshEditor', () => {
+            if (editorInstance) {
+                editorInstance.setData(@this.get('description') || '');
+            }
+        });
+    });
+</script>

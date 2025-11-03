@@ -45,6 +45,12 @@
                 <?php echo e(request()->routeIs('users.list') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800'); ?>">
             👥 <span class="ml-3">User list</span>
         </a>
+
+        <a href="<?php echo e(route('user.applications')); ?>"
+            class="flex items-center px-3 py-2 rounded-lg transition-colors duration-200
+                <?php echo e(request()->routeIs('user.applications') ? 'bg-gray-100 text-gray-900 font-semibold cursor-default' : 'hover:bg-gray-100 hover:text-gray-800'); ?>">
+            📋 <span class="ml-3">My Applications</span>
+        </a>
         <?php endif; ?>
 
         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->denies('is-admin')): ?>

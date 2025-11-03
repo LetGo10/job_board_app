@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-
+ <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
     <!-- Styles / Scripts -->
     <?php if (isset($component)) { $__componentOriginalb75232b8bc12d517b99e803bac7dbc77 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalb75232b8bc12d517b99e803bac7dbc77 = $attributes; } ?>
@@ -86,23 +86,8 @@
                 <?php echo $__env->yieldContent('content'); ?>
             </main>
 
-            <!-- Modal Livewire Global -->
-            <?php
-$__split = function ($name, $params = []) {
-    return [$name, $params];
-};
-[$__name, $__params] = $__split('job-create', []);
-
-$__html = app('livewire')->mount($__name, $__params, 'lw-3502130578-0', $__slots ?? [], get_defined_vars());
-
-echo $__html;
-
-unset($__html);
-unset($__name);
-unset($__params);
-unset($__split);
-if (isset($__slots)) unset($__slots);
-?>
+            <!-- Modal Livewire Global - Disabled temporarily to fix conflicts -->
+            
         </div>
     </div>
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
