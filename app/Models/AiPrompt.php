@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use League\CommonMark\CommonMarkConverter;
 
 class AiPrompt extends Model
 {
+    protected $table = 'aiprompt';
+
     protected $fillable = [
         'user_id',
         'request_id',
@@ -28,5 +32,19 @@ class AiPrompt extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getFormattedResponse(): string
+    {
+        if (! $this->response) {
+            return '';
+        }
+
+        $converter = new CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
+
+        return $converter->convert($this->response)->getContent();
     }
 }

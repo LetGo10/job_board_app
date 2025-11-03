@@ -8,7 +8,7 @@
             <div class="hidden md:flex space-x-6">
                 <a href="<?php echo e(route('home')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('home') ? 'font-semibold text-purple-700' : ''); ?>">Home</a>
                 <a href="<?php echo e(route('jobs')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('jobs') ? 'font-semibold text-purple-700' : ''); ?>">Jobs</a>
-                <a href="<?php echo e(route('select.package')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('select.package') ? 'font-semibold text-purple-700' : ''); ?>">Packages</a>
+                <!--<a href="<?php echo e(route('select.package')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('select.package') ? 'font-semibold text-purple-700' : ''); ?>">Packages</a>-->
                 <a href="<?php echo e(route('companies')); ?>" class="text-gray-600 hover:text-purple-700 <?php echo e(request()->routeIs('companies') ? 'font-semibold text-purple-700' : ''); ?>">Companies</a>
                 <a href="#about" class="text-gray-600 hover:text-purple-700">About</a>
                 <?php if(auth()->guard()->check()): ?>

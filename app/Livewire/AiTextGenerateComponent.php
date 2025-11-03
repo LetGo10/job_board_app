@@ -2,12 +2,17 @@
 
 namespace App\Livewire;
 
+use App\Jobs\SendAiPrompt;
+use App\Models\AiPrompt;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class AiTextGenerateComponent extends Component
 {
     public string $prompt = 'Generate job description for Laravel Developer in Malaysia.';
+
     public ?AiPrompt $currentPrompt = null;
+
     public string $requestId = '';
 
     public function generatePrompt(): void
@@ -22,7 +27,11 @@ class AiTextGenerateComponent extends Component
         ]);
 
         // Communicate dengan deepseek.
-
+        SendAiPrompt::dispatch(
+            $this->requestId,
+            $this->prompt,
+            auth()->id()
+        );
     }
 
     public function checkStatus(): void

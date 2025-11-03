@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Job;
-use Laravel\Cashier\Cashier;
-use App\Livewire\Settings\Profile;
-use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Appearance;
+use App\Livewire\Settings\Password;
+use App\Livewire\Settings\Profile;
+use App\Models\Job;
 use Illuminate\Support\Facades\Route;
+use Laravel\Cashier\Cashier;
 
 Route::get('/', function () {
     return view('home');
@@ -29,6 +29,14 @@ Route::get('/companies', function () {
     return view('companies');
 })->name('companies');
 
+/*Route::get('/post-job', \App\Livewire\PostJob::class)
+    ->middleware(['auth'])
+    ->name('post.job');*/
+
+Route::get('/post-job', function () {
+    return view('create-job-direct');
+})->middleware(['auth'])->name('post.job');
+
 Route::get('/select-package', function () {
     return view('main-packages');
 })->name('select.package');
@@ -40,6 +48,18 @@ Route::get('/checkout/success', function () {
 Route::get('user/user-applications', function () {
     return view('user-applications');
 })->name('user.applications');
+
+Route::get('/my-job-posts', function () {
+    return view('my-job-posts');
+})->middleware(['auth'])->name('my.job.posts');
+
+Route::get('/edit-job/{jobId}', function ($jobId) {
+    return view('edit-my-job-posts', compact('jobId'));
+})->middleware(['auth'])->name('edit-job');
+
+Route::get('/admin/job-management', function () {
+    return view('admin.job-management');
+})->middleware(['auth', 'can:is-admin'])->name('admin.job.management');
 
 Route::get('/login2', function () {
     return view('main-login');
@@ -87,7 +107,7 @@ Route::get('/checkout/success', function () {
     if ($session->payment_status === 'paid') {
         // Payment was successful, you can perform post-payment actions here
         $jobId = $session->metadata->job_id;
-        Job::where('id', $jobId)->update(['status' => "Active"]);
+        Job::where('id', $jobId)->update(['status' => 'Active']);
     } else {
         // Payment was not successful, handle accordingly
     }
@@ -95,24 +115,33 @@ Route::get('/checkout/success', function () {
     return view('checkout.success');
 })->name('checkout.success');
 
-/* Route::get('/checkout/success', function () {
-    return view('main-success');
-})->name('checkout.success');*/
+Route::post('/stripe/webhook', function (Request $request) {
+    $payload = $request->getContent();
+    $event = $payload ? json_decode($payload, true) : [];
+    Log::info('Stripe Webhook Received: ', $event);
+
+    if ($event['type'] == 'payment_intent.succeeded') {
+        $paymentIntent = $event['data']['object'];
+        $metadata = $paymentIntent['metadata'] ?? [];
+        $jobId = isset($metadata['job_id']) ? $metadata['job_id'] : null;
+
+        if ((config('app.env') === 'production' && $jobId) || config('app.env') === 'local') {
+            if (empty($jobId)) {
+                $jobId = Job::latest()->first()->id;
+            }
+            Job::where('id', $jobId)->update(['status' => 'Active']);
+            Log::info("Job ID {$jobId} status updated to Active.");
+        } else {
+            Log::warning('No job_id found in payment intent metadata.');
+        }
+    }
+
+    return response()->json(['status' => 'success']);
+})->name('stripe.webhook');
 
 Route::get('/checkout/cancel', function () {
-    return view('main-cancel');
+    return view('checkout.cancel');
 })->name('checkout.cancel');
-
-Route::post('/stripe/webhook', function (Request $request) {
-    $sessionId = request('session_id');
-    $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
-    if ($session->payment_status === 'paid') {
-        // Payment was successful, you can perform post-payment actions here
-    } else {
-        // Payment was not successful, handle accordingly
-    }
-    Log::info($request->all());
-})->name('stripe.webhook');
 
 Route::get('/ai-test', function () {
     return view('ai-test');

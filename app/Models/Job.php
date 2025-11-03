@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\JobApplication;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
@@ -17,10 +16,22 @@ class Job extends Model
         'company',
         'location',
         'description',
+        'status',
+        'requirements',
+        'work_type',
+        'job_type',
+        'salary_range',
+        'owner_id',
+        'total_view',
     ];
 
     public function applications()
     {
         return $this->hasMany(JobApplication::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 }

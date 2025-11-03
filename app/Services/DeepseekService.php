@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use Illuminate\Support\Facades\Http;
 
 class DeepseekService
@@ -10,11 +11,11 @@ class DeepseekService
         $response = Http::timeout(120)
             ->connectTimeout(30)
             ->withHeaders([
-                'Authorization' => 'Bearer ' . config('services.deepseek.key'),
+                'Authorization' => 'Bearer '.config('services.deepseek.key'),
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                config('services.deepseek.base_url') . '/chat/completions',
+                config('services.deepseek.base_url').'/chat/completions',
                 [
                     'model' => 'deepseek-chat',
                     'messages' => [
@@ -24,14 +25,14 @@ class DeepseekService
                         ],
                         [
                             'role' => 'user',
-                            'content' => $prompt,
+                            'content' => $prompt, // User's prompt
                         ],
                     ],
                 ]
             );
 
         if ($response->failed()) {
-            throw new \Exception('Deepseek API request failed: ' . $response->body());
+            throw new \Exception('Deepseek API request failed: '.$response->body());
         }
 
         $data = $response->json();
