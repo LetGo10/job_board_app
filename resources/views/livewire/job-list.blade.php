@@ -5,7 +5,10 @@
             <!-- Job Info -->
             <div class="flex-1">
             <h3 class="text-xl font-semibold text-gray-900">{{ $job['title'] }}</h3>
-            <p class="mt-2 text-gray-600"> {{ $job['description'] }}</p>
+            <div class="mt-2 text-gray-600 prose prose-sm max-w-none">
+                <!-- tukar html tags, 120 means 120 patah perkataan ja -->
+                {!! Str::limit(strip_tags($job['description']), 120) !!}
+            </div>
             <div class="mt-3 flex gap-2 flex-wrap">
                 <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">{{ $job['company'] }}</span>
                 <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs"> {{ $job['location'] }}</span>
@@ -63,6 +66,50 @@
         </p>
     </div>
     @endforelse
+
+    <!-- Livewire Pagination -->
+    @if($jobs->hasPages())
+        <div class="mt-10">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+                <!-- Results info -->
+                <div class="text-sm text-gray-600">
+                    Showing <span class="font-semibold text-gray-900">{{ $jobs->firstItem() }}</span> to 
+                    <span class="font-semibold text-gray-900">{{ $jobs->lastItem() }}</span> of 
+                    <span class="font-semibold text-gray-900">{{ $jobs->total() }}</span> jobs
+                </div>
+                
+                <!-- Pagination buttons -->
+                <div class="flex items-center gap-1">
+                    @if ($jobs->onFirstPage())
+                        <span class="px-3 py-2 text-sm text-gray-400 bg-gray-100 rounded-md cursor-not-allowed">
+                            ← Previous
+                        </span>
+                    @else
+                        <button wire:click="previousPage" 
+                                class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                            ← Previous
+                        </button>
+                    @endif
+
+                    <!-- Page numbers (simple version) -->
+                    <span class="px-3 py-2 text-sm bg-purple-100 text-purple-700 rounded-md font-medium mx-2">
+                        {{ $jobs->currentPage() }} / {{ $jobs->lastPage() }}
+                    </span>
+
+                    @if ($jobs->hasMorePages())
+                        <button wire:click="nextPage" 
+                                class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                            Next →
+                        </button>
+                    @else
+                        <span class="px-3 py-2 text-sm text-gray-400 bg-gray-100 rounded-md cursor-not-allowed">
+                            Next →
+                        </span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Delete Modal -->
     <div x-data="{ open: @entangle('showDeleteModal') }" x-cloak>

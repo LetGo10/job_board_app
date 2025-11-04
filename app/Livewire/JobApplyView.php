@@ -18,6 +18,13 @@ class JobApplyView extends Component
         $this->showModal = true;
     }
 
+    #[On('viewJobApplicant2')]
+    public function viewJobApplicant2($jobId)
+    {
+        $this->jobsapply = JobApplication::with('job')->find($jobId);
+        $this->showModal = true;
+    }
+
     public function closeModal()
     {
         $this->showModal = false;

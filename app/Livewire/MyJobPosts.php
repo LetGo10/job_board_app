@@ -17,6 +17,8 @@ class MyJobPosts extends Component
 
     public $typeFilter = 'all';
 
+    public $activeTab = 'all';
+
     public $showActivateModal = false;
 
     public $jobToActivate = null;
@@ -44,6 +46,11 @@ class MyJobPosts extends Component
     {
         $this->typeFilter = $type;
         $this->resetPage();
+    }
+
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
     }
 
     public function confirmDelete($jobId)

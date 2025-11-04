@@ -12,11 +12,44 @@
         </div>
     @endif
 
-    <!-- Jobs List -->
-        @if($jobs->count() > 0)
+    <!-- Tabs Navigation -->
+    @if($jobs->count() > 0)
+        <div class="mb-6">
+            <div class="border-b border-gray-200 dark:border-gray-700">
+                <nav class="-mb-px flex space-x-8">
+                    <button wire:click="setActiveTab('all')"
+                            class="py-2 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'all' ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        All Jobs ({{ $jobs->count() }})
+                    </button>
+                    <button wire:click="setActiveTab('active')"
+                            class="py-2 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'active' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        Active ({{ $jobs->where('status', 'active')->count() }})
+                    </button>
+                    <button wire:click="setActiveTab('pending')"
+                            class="py-2 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'pending' ? 'border-yellow-500 text-yellow-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        Pending ({{ $jobs->where('status', 'pending')->count() }})
+                    </button>
+                    <!-- <button wire:click="$set('activeTab', 'all')"
+                            class="py-2 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'all' ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        All Jobs ({{ $jobs->count() }})
+                    </button>
+                    <button wire:click="$set('activeTab', 'active')"
+                            class="py-2 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'active' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        Active ({{ $jobs->where('status', 'active')->count() }})
+                    </button>
+                    <button wire:click="$set('activeTab', 'pending')"
+                            class="py-2 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'pending' ? 'border-yellow-500 text-yellow-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        Pending ({{ $jobs->where('status', 'pending')->count() }})
+                    </button> -->
+                </nav>
+            </div>
+        </div>
+
+        <!-- All Jobs Table -->
+        <div x-show="$wire.activeTab === 'all'" x-transition>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-blue-50 dark:bg-blue-900 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 Job Details
@@ -40,6 +73,7 @@
                         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <div class="flex items-center gap-3">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
                                     <div>
                                         <div class="font-medium text-gray-900 dark:text-white">{{ $job->title }}</div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400">{{ $job->company }}</div>
@@ -111,10 +145,182 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>            <!-- Pagination -->
+            </div>
+            <!-- Pagination for All Jobs -->
             <div class="mt-6">
                 {{ $jobs->links() }}
             </div>
+        </div>
+
+        <!-- Active Jobs Table -->
+        <div x-show="$wire.activeTab === 'active'" x-transition style="display: none;">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-green-50 dark:bg-green-900 dark:text-green-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Job Details</th>
+                            <th scope="col" class="px-6 py-3">Type</th>
+                            <th scope="col" class="px-6 py-3">Posted Date</th>
+                            <th scope="col" class="px-6 py-3">Applications</th>
+                            <th scope="col" class="px-6 py-3 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($jobs->where('status', 'active') as $job)
+                        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <div>
+                                        <div class="font-medium text-gray-900 dark:text-white">{{ $job->title }}</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ $job->company }}</div>
+                                    </div>
+                                </div>
+                            </th>
+                            <td class="px-6 py-4">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    {{ ucfirst(str_replace('-', ' ', $job->job_type ?? 'N/A')) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                {{ $job->created_at->format('M j, Y') }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
+                                    {{ $job->applications_count ?? 0 }} applications
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex justify-center items-center space-x-2">
+                                    <button wire:click="$dispatch('openJobView', { jobId: {{ $job->id }} })" title="View Job" class="p-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none rounded-full transition-all duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                    </button>
+                                    <a href="{{ route('edit-job', $job->id) }}" title="Edit Job" class="p-2 text-white bg-gray-600 hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:outline-none rounded-full transition-all duration-200 inline-block">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </a>
+                                    <button wire:click="confirmDelete({{ $job->id }})"
+                                            wire:loading.attr="disabled"
+                                            title="Delete Job"
+                                            class="p-2 text-white bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:outline-none rounded-full transition-all duration-200 disabled:opacity-50">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                <div class="flex flex-col items-center">
+                                    <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p class="text-lg font-medium text-gray-900 mb-2">No Active Jobs</p>
+                                    <p class="text-gray-500">You don't have any active job postings yet.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pending Jobs Table -->
+        <div x-show="$wire.activeTab === 'pending'" x-transition style="display: none;">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-yellow-50 dark:bg-yellow-900 dark:text-yellow-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Job Details</th>
+                            <th scope="col" class="px-6 py-3">Type</th>
+                            <th scope="col" class="px-6 py-3">Posted Date</th>
+                            <th scope="col" class="px-6 py-3">Status</th>
+                            <th scope="col" class="px-6 py-3 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($jobs->where('status', 'pending') as $job)
+                        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                                    <div>
+                                        <div class="font-medium text-gray-900 dark:text-white">{{ $job->title }}</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ $job->company }}</div>
+                                    </div>
+                                </div>
+                            </th>
+                            <td class="px-6 py-4">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    {{ ucfirst(str_replace('-', ' ', $job->job_type ?? 'N/A')) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                {{ $job->created_at->format('M j, Y') }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                        Awaiting Payment
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex justify-center items-center space-x-2">
+                                    <button wire:click="confirmActivate({{ $job->id }})"
+                                            wire:loading.attr="disabled"
+                                            title="Activate Job"
+                                            class="p-2 text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none rounded-full transition-all duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </button>
+                                    <button wire:click="$dispatch('openJobView', { jobId: {{ $job->id }} })" title="View Job" class="p-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none rounded-full transition-all duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                    </button>
+                                    <a href="{{ route('edit-job', $job->id) }}" title="Edit Job" class="p-2 text-white bg-gray-600 hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:outline-none rounded-full transition-all duration-200 inline-block">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </a>
+                                    <button wire:click="confirmDelete({{ $job->id }})"
+                                            wire:loading.attr="disabled"
+                                            title="Delete Job"
+                                            class="p-2 text-white bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:outline-none rounded-full transition-all duration-200 disabled:opacity-50">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                <div class="flex flex-col items-center">
+                                    <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p class="text-lg font-medium text-gray-900 mb-2">No Pending Jobs</p>
+                                    <p class="text-gray-500">All your jobs are either active or you haven't created any pending jobs yet.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     @else
         <!-- Empty State -->
         <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-12">
@@ -183,16 +389,11 @@
                     </p>
 
                     <!-- Job Details Preview -->
-                    <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 text-sm">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-green-700 dark:text-green-400 font-medium">✨ Job Activation</span>
-                            <span class="font-bold text-green-600 dark:text-green-400">RM 50.00</span>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Activation Fee:</span>
+                            <span class="font-semibold text-green-600">RM 50.00</span>
                         </div>
-                        <ul class="text-xs text-green-600 dark:text-green-400 space-y-1">
-                            <li>• Job becomes visible to job seekers</li>
-                            <li>• Receive candidate applications</li>
-                            <li>• 30-day active period included</li>
-                        </ul>
                     </div>
                 </div>
 

@@ -44,11 +44,8 @@
                             wire:model.live="statusFilter"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white">
                         <option value="all">All Status</option>
-                        <option value="draft">Draft</option>
                         <option value="pending">Pending</option>
                         <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="closed">Closed</option>
                     </select>
                 </div>
             </div>

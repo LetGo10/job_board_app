@@ -7,10 +7,10 @@
             <a href="{{ route('home') }}" class="text-xl font-extrabold text-purple-700">JobPortal</a>
             <div class="hidden md:flex space-x-6">
                 <a href="{{ route('home') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('home') ? 'font-semibold text-purple-700' : '' }}">Home</a>
-                <a href="{{ route('jobs') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('jobs') ? 'font-semibold text-purple-700' : '' }}">Jobs</a>
-                <!--<a href="{{ route('select.package') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('select.package') ? 'font-semibold text-purple-700' : '' }}">Packages</a>-->
                 <a href="{{ route('companies') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('companies') ? 'font-semibold text-purple-700' : '' }}">Companies</a>
+                <!--<a href="{{ route('select.package') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('select.package') ? 'font-semibold text-purple-700' : '' }}">Packages</a>-->
                 <a href="#about" class="text-gray-600 hover:text-purple-700">About</a>
+                <a href="{{ route('jobs') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('jobs') ? 'font-semibold text-purple-700' : '' }}">Jobs</a>
                 @auth
                     @cannot('is-admin')
                         <a href="{{ route('user.dashboard') }}" class="text-gray-600 hover:text-purple-700 {{ request()->routeIs('user.dashboard') ? 'font-semibold text-purple-700' : '' }}">Dashboard</a>

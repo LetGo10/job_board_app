@@ -7,4 +7,5 @@
     </div>
 
     <livewire:user-job-applied-list />
+    @livewire('job-apply-view')
 @endsection

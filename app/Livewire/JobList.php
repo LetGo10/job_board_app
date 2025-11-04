@@ -5,18 +5,15 @@ namespace App\Livewire;
 use App\Models\Job;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
 
 class JobList extends Component
 {
-    public $jobs = [];
+    use WithPagination;
+
     public $currentSearch = '';
     public $showDeleteModal = false;
     public $jobToDelete = null;
-
-    public function mount()
-    {
-        $this->jobs = Job::all();
-    }
 
     public function viewJob($jobId)
     {
@@ -31,14 +28,13 @@ class JobList extends Component
     #[On('jobUpdated')]
     public function handleJobUpdated()
     {
-        $this->jobs = Job::all();
+        $this->resetPage();
     }
 
     #[On('jobCreated')]
     public function handleJobCreated($jobId)
     {
-        //$this->jobs[] = Job::find($jobId);
-        $this->refreshJobs();
+        $this->resetPage();
     }
 
     // call modal
@@ -54,7 +50,7 @@ class JobList extends Component
         $job = Job::find($jobId);
         if ($job) {
             $job->delete();
-            $this->jobs = $this->jobs->filter(fn($j) => $j->id !== $jobId);
+            $this->resetPage();
         }
         $this->closeDeleteModal();
     }
@@ -70,24 +66,22 @@ class JobList extends Component
     public function handleSearchUpdated($search)
     {
         $this->currentSearch = $search;
-        $this->refreshJobs();
-    }
-
-    protected function refreshJobs()
-    {
-        if (empty($this->currentSearch)) {
-            $this->jobs = Job::latest()->get();
-        } else {
-            $this->jobs = Job::where('title', 'like', '%' . $this->currentSearch . '%')
-                ->orWhere('company', 'like', '%' . $this->currentSearch . '%')
-                ->orWhere('location', 'like', '%' . $this->currentSearch . '%')
-                ->latest()
-                ->get();
-        }
+        $this->resetPage();
     }
 
     public function render()
     {
-        return view('livewire.job-list');
+        $jobs = Job::where('status', 'active') // Only active jobs
+            ->when($this->currentSearch, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('title', 'like', '%' . $this->currentSearch . '%')
+                      ->orWhere('company', 'like', '%' . $this->currentSearch . '%')
+                      ->orWhere('location', 'like', '%' . $this->currentSearch . '%');
+                });
+            })
+            ->latest()
+            ->paginate(6); // 6 jobs per page
+
+        return view('livewire.job-list', compact('jobs'));
     }
 }

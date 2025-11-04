@@ -22,6 +22,7 @@ class JobApplication extends Model
         'expected_salary',
         'available_start_date',
         'willing_to_relocate',
+        'status',
     ];
 
     protected $casts = [

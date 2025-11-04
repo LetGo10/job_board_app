@@ -15,6 +15,8 @@ class AdminJobManagement extends Component
 
     public $statusFilter = 'all';
 
+    public $activeTab = 'all';
+
     public $showDeleteModal = false;
 
     public $jobToDelete = null;
@@ -34,6 +36,14 @@ class AdminJobManagement extends Component
     public function updateFilter($filter)
     {
         $this->statusFilter = $filter;
+        $this->activeTab = $filter; // Sync the tab with the filter
+        $this->resetPage();
+    }
+
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
+        $this->statusFilter = $tab; // Sync the filter with the tab
         $this->resetPage();
     }
 
@@ -81,20 +91,64 @@ class AdminJobManagement extends Component
         $this->jobToActivate = null;
     }
 
+    public function confirmReject($jobId)
+    {
+        if ($job = Job::find($jobId)) {
+            $job->update(['status' => 'rejected']);
+            session()->flash('message', 'Job has been rejected.');
+            $this->resetPage();
+        }
+    }
+
+    public function confirmDeactivate($jobId)
+    {
+        if ($job = Job::find($jobId)) {
+            $job->update(['status' => 'inactive']);
+            session()->flash('message', 'Job has been deactivated.');
+            $this->resetPage();
+        }
+    }
+
     public function render()
     {
-        $jobs = Job::with('user')
-            ->when($this->search, function ($query) {
+        // Base query with relationships
+        $baseQuery = Job::with('user');
+        
+        // Apply status filter (works for both dropdown filter and tab clicks)
+        $currentFilter = $this->statusFilter !== 'all' ? $this->statusFilter : $this->activeTab;
+        if ($currentFilter !== 'all') {
+            $baseQuery->where('status', $currentFilter);
+        }
+        
+        // Then apply search within the filtered results
+        if ($this->search) {
+            $baseQuery->where(function ($query) {
                 $query->where('title', 'like', '%'.$this->search.'%')
-                    ->orWhere('company', 'like', '%'.$this->search.'%')
-                    ->orWhere('location', 'like', '%'.$this->search.'%');
-            })
-            ->when($this->statusFilter !== 'all', function ($query) {
-                $query->where('status', $this->statusFilter);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+                      ->orWhere('company', 'like', '%'.$this->search.'%')
+                      ->orWhere('location', 'like', '%'.$this->search.'%')
+                      ->orWhere('job_type', 'like', '%'.$this->search.'%')
+                      ->orWhere('work_type', 'like', '%'.$this->search.'%')
+                      ->orWhere('description', 'like', '%'.$this->search.'%');
+            });
+        }
+        
+        // Get paginated jobs for display
+        $jobs = $baseQuery->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('livewire.admin-job-management', compact('jobs'));
+        // Get total counts for statistics (from all jobs, not just paginated)
+        $allJobsQuery = Job::when($this->search, function ($query) {
+            $query->where('title', 'like', '%'.$this->search.'%')
+                ->orWhere('company', 'like', '%'.$this->search.'%')
+                ->orWhere('location', 'like', '%'.$this->search.'%');
+        });
+
+        $totalCounts = [
+            'all' => $allJobsQuery->count(),
+            'pending' => $allJobsQuery->clone()->where('status', 'pending')->count(),
+            'active' => $allJobsQuery->clone()->where('status', 'active')->count(),
+            'inactive' => $allJobsQuery->clone()->where('status', 'inactive')->count(),
+        ];
+
+        return view('livewire.admin-job-management', compact('jobs', 'totalCounts'));
     }
 }
