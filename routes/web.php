@@ -111,7 +111,7 @@ Route::get('/checkout/success', function () {
     if ($session->payment_status === 'paid') {
         // Payment was successful, you can perform post-payment actions here
         $jobId = $session->metadata->job_id;
-        Job::where('id', $jobId)->update(['status' => 'Active']);
+        Job::where('id', $jobId)->update(['status' => 'active']);
     } else {
         // Payment was not successful, handle accordingly
     }
