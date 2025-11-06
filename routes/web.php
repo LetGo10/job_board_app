@@ -133,7 +133,7 @@ Route::post('/stripe/webhook', function (Request $request) {
             if (empty($jobId)) {
                 $jobId = Job::latest()->first()->id;
             }
-            Job::where('id', $jobId)->update(['status' => 'Active']);
+            Job::where('id', $jobId)->update(['status' => 'active']);
             Log::info("Job ID {$jobId} status updated to Active.");
         } else {
             Log::warning('No job_id found in payment intent metadata.');
